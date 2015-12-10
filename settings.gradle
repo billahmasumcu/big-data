@@ -1,0 +1,6 @@
+rootProject.name = 'link-data-stream-analysis'
+include "big-data"
+include "database"
+include 'tracking-service'
+include 'link-data'
+

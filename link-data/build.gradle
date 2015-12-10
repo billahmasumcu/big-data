@@ -1,0 +1,4 @@
+dependencies {
+    compile project(':database')
+    compile project(':big-data')
+}
