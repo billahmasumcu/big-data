@@ -21,7 +21,7 @@ public class Top {
     public static void wordCounts(JavaDStream<String> baseStream) {
     	JavaDStream<String> words = baseStream.flatMap(s -> Arrays.asList(s.split(" ")));
 
-    	JavaPairDStream<String, Integer> pairs = words.mapToPair(s -> new Tuple2(s, 1));
+    	JavaPairDStream<String, Integer> pairs = words.mapToPair(s -> new Tuple2<String, Integer>(s, 1));
 
     	JavaPairDStream<String, Integer> wordCounts = pairs.reduceByKey((a, b) -> a + b);
     	
@@ -33,16 +33,15 @@ public class Top {
      * 
      * @param baseRDD
      * @param number: number of items that should return 
-     * @return
      */
-    public static List<String> topWords(JavaRDD<String> baseRDD, Integer number) {
+    public static void topWords(JavaRDD<String> baseRDD, Integer number) {
         JavaRDD<String> words = baseRDD.flatMap(s -> Arrays.asList(s.split(" ")));
 
-        JavaPairRDD<String, Integer> pairs = words.mapToPair(s -> new Tuple2(s, 1));
+        JavaPairRDD<String, Integer> pairs = words.mapToPair(s -> new Tuple2<String, Integer>(s, 1));
 
         JavaPairRDD<String, Integer> wordCounts = pairs.reduceByKey((a, b) -> a + b);
-
-        List sorted = wordCounts.mapToPair(t -> new Tuple2(t._2, t._1))
+        
+        List<Tuple2<Integer, String>> sorted = wordCounts.mapToPair(t -> new Tuple2<Integer, String>(t._2, t._1))
             .sortByKey(false)
             .collect();
 
@@ -50,8 +49,8 @@ public class Top {
             number = sorted.size();
         }
         
-        System.out.println(sorted);
-
-        return sorted.subList(0, number);
+        List<Tuple2<Integer, String>> topList = sorted.subList(0, number);
+        
+        System.out.println(topList);
     }
 }
