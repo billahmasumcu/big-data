@@ -9,8 +9,15 @@ import java.util.List;
 import java.util.Arrays;
 import scala.Tuple2;
 
+/**
+ * Analysis for having top listings.
+ */
 public class Top {
-
+	/**
+	 * Counting each word appearance on given stream.
+	 * 
+	 * @param baseStream
+	 */
     public static void wordCounts(JavaDStream<String> baseStream) {
     	JavaDStream<String> words = baseStream.flatMap(s -> Arrays.asList(s.split(" ")));
 
@@ -21,6 +28,13 @@ public class Top {
     	wordCounts.print();    	
     }
 
+    /**
+     * Get top x words from given rdd.
+     * 
+     * @param baseRDD
+     * @param number: number of items that should return 
+     * @return
+     */
     public static List<String> topWords(JavaRDD<String> baseRDD, Integer number) {
         JavaRDD<String> words = baseRDD.flatMap(s -> Arrays.asList(s.split(" ")));
 
@@ -35,6 +49,8 @@ public class Top {
         if (sorted.size() < number ) {
             number = sorted.size();
         }
+        
+        System.out.println(sorted);
 
         return sorted.subList(0, number);
     }

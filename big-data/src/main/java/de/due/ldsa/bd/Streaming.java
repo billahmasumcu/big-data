@@ -16,14 +16,18 @@ public class Streaming extends Base {
 
     private JavaStreamingContext streamingContext;
 
-	public JavaReceiverInputDStream<String> baseDStream;
+	private JavaReceiverInputDStream<String> baseDStream;
 
     public Streaming() {
         super();
 
         streamingContext = new JavaStreamingContext(sparkContext, Durations.seconds(Config.interval));
         
-        baseDStream = streamingContext.receiverStream(new CustomReceiver());
+        populateBaseDStream();
+    }
+    
+    private void populateBaseDStream() {
+    	baseDStream = streamingContext.receiverStream(new CustomReceiver());
     }
 
     public void run() {

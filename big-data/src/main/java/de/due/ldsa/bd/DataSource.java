@@ -1,5 +1,7 @@
 package de.due.ldsa.bd;
 
+import java.util.List;
+
 /**
  * Data source for Streaming class.
  * 
@@ -8,16 +10,22 @@ package de.due.ldsa.bd;
  * 
  * getSourceData has been called by CustomReceiver class.
  */
-public class DataSource {
-	private static String sourceData;
+public class DataSource implements DataProvider {
+	private static String stringSource;
+	
+	private static List<String> listSource;
 	
 	/**
 	 * Set data into static property.
 	 * 
 	 * @param data
 	 */
-	public static void setSourceData(String data) {
-		sourceData = data;
+	public void setSourceData(String data) {
+		stringSource = data;
+	}
+	
+	public void setSourceData(List<String> data) {
+		listSource = data;
 	}
 	
 	/**
@@ -25,7 +33,11 @@ public class DataSource {
 	 * 
 	 * @return String
 	 */
-	public static String getSourceData() {
-		return sourceData;
+	public String getSourceData() {
+		return stringSource;
+	}
+	
+	public List<String> getListSourceData() {
+		return listSource;
 	}
 }
