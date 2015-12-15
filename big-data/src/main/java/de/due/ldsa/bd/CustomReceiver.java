@@ -29,7 +29,7 @@ public class CustomReceiver extends Receiver<String> {
 	 * Get data from DataSource
 	 */
 	private void receive() {
-		DataSource source = new DataSource();
-		store(source.getSourceData());
+		store(new DataProvider().getStringSourceData());
+		//store("Something");
 	}
 }

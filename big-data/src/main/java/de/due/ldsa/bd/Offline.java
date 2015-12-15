@@ -3,8 +3,10 @@ package de.due.ldsa.bd;
 import org.apache.spark.api.java.JavaRDD;
 import de.due.ldsa.bd.analysis.Top;
 
+import javax.json.JsonObject;
+
 public class Offline extends Base {
-	private JavaRDD<String> baseRDD;
+	private JavaRDD<?> baseRDD;
 	
 	public Offline() {
 		super();
@@ -13,11 +15,11 @@ public class Offline extends Base {
 	}
 	
 	private void populateBaseRDD() {
-		DataSource source = new DataSource();
+		DataProvider source = new DataProvider();
 		baseRDD = sparkContext.parallelize(source.getListSourceData());
 	}
 	
 	public void run() {
-		Top.topWords(baseRDD, 10);
+		Top.topWords((JavaRDD<String>) baseRDD, 10);
 	}
 }

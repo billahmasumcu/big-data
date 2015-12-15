@@ -1,17 +1,31 @@
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-import de.due.ldsa.bd.DataSource;
+import java.util.Arrays;
+import java.util.List;
+
+import de.due.ldsa.bd.DataProvider;
 
 public class DataSourceTest {
-	private String data = "Hello World";
-	
 	@Test
-	public void testSetAndGetSourceData() {
-		DataSource source1 = new DataSource();	
+	public void testSetAndGetStringSourceData() {
+		String data = "Hello World";
+		
+		DataProvider source1 = new DataProvider();	
 		source1.setSourceData(data);
 		
-		DataSource source2 = new DataSource();	
-		assertEquals(source2.getSourceData(), data);
+		DataProvider source2 = new DataProvider();	
+		assertEquals(source2.getStringSourceData(), data);
+	}
+	
+	@Test
+	public void testSetAndGetListSourceData() {
+		List<String> data = Arrays.asList("Hello World1", "Hello World2");
+		
+		DataProvider source1 = new DataProvider();	
+		source1.setSourceData(data);
+		
+		DataProvider source2 = new DataProvider();	
+		assertEquals(source2.getListSourceData(), data);
 	}
 }

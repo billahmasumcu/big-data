@@ -6,10 +6,9 @@ import java.util.List;
 public class OfflineMain {
 	public static void main(String[] args) {
 		// Building an example List.
-    	String example = "Hello World";
-    	List<String> items = Arrays.asList(example.split("[\\r\\n]+"));
+		List<String> items = Arrays.asList("Hello World1", "Hello World2", "Hello World3");
     	
-    	DataSource source = new DataSource();
+    	DataProvider source = new DataProvider();
     	source.setSourceData(items);
     	
     	Offline app = new Offline();

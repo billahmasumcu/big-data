@@ -37,6 +37,7 @@ public class Top {
     public static void topWords(JavaRDD<String> baseRDD, Integer number) {
         JavaRDD<String> words = baseRDD.flatMap(s -> Arrays.asList(s.split(" ")));
 
+        
         JavaPairRDD<String, Integer> pairs = words.mapToPair(s -> new Tuple2<String, Integer>(s, 1));
 
         JavaPairRDD<String, Integer> wordCounts = pairs.reduceByKey((a, b) -> a + b);
