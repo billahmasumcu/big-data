@@ -9,33 +9,49 @@ import java.util.List;
 import java.util.Arrays;
 import scala.Tuple2;
 
+/**
+ * Analysis for having top listings.
+ */
 public class Top {
-
+	/**
+	 * Counting each word appearance on given stream.
+	 * 
+	 * @param baseStream
+	 */
     public static void wordCounts(JavaDStream<String> baseStream) {
     	JavaDStream<String> words = baseStream.flatMap(s -> Arrays.asList(s.split(" ")));
 
-    	JavaPairDStream<String, Integer> pairs = words.mapToPair(s -> new Tuple2(s, 1));
+    	JavaPairDStream<String, Integer> pairs = words.mapToPair(s -> new Tuple2<String, Integer>(s, 1));
 
     	JavaPairDStream<String, Integer> wordCounts = pairs.reduceByKey((a, b) -> a + b);
     	
     	wordCounts.print();    	
     }
 
-    public static List<String> topWords(JavaRDD<String> baseRDD, Integer number) {
+    /**
+     * Get top x words from given rdd.
+     * 
+     * @param baseRDD
+     * @param number: number of items that should return 
+     */
+    public static void topWords(JavaRDD<String> baseRDD, Integer number) {
         JavaRDD<String> words = baseRDD.flatMap(s -> Arrays.asList(s.split(" ")));
 
-        JavaPairRDD<String, Integer> pairs = words.mapToPair(s -> new Tuple2(s, 1));
+        
+        JavaPairRDD<String, Integer> pairs = words.mapToPair(s -> new Tuple2<String, Integer>(s, 1));
 
         JavaPairRDD<String, Integer> wordCounts = pairs.reduceByKey((a, b) -> a + b);
-
-        List sorted = wordCounts.mapToPair(t -> new Tuple2(t._2, t._1))
+        
+        List<Tuple2<Integer, String>> sorted = wordCounts.mapToPair(t -> new Tuple2<Integer, String>(t._2, t._1))
             .sortByKey(false)
             .collect();
 
         if (sorted.size() < number ) {
             number = sorted.size();
         }
-
-        return sorted.subList(0, number);
+        
+        List<Tuple2<Integer, String>> topList = sorted.subList(0, number);
+        
+        System.out.println(topList);
     }
 }
