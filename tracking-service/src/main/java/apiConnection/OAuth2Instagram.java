@@ -13,18 +13,22 @@ import org.jinstagram.auth.exceptions.OAuthException;
 import org.jinstagram.auth.model.Token;
 import org.jinstagram.auth.model.Verifier;
 import org.jinstagram.auth.oauth.InstagramService;
-
+/**
+ * OAuth2 Class to communicate with Instagram OAuth2 Protocol
+ * @author Salah Beck
+ *
+ */
 public class OAuth2Instagram implements OAuth2 {
 	private static final Token EMPTY_TOKEN = null;
+	InstagramService service;
 
-	/**
-	 * saves the Access Token for the next use AND for this session
-	 */
-	public Token saveAccessToken(String clientID, String clientSecret, String callbackURL, String verifierString) {
-		InstagramService service = new InstagramAuthService().apiKey(clientID).apiSecret(clientSecret)
-				.callback(callbackURL).scope("public_content").scope("follower_list").build();
-		String authorizationUrl = service.getAuthorizationUrl(EMPTY_TOKEN);
-		System.out.println(authorizationUrl);
+	public void createService(String clientID, String clientSecret, String callbackURL) {
+		service = new InstagramAuthService().apiKey(clientID).apiSecret(clientSecret).callback(callbackURL)
+				.scope("public_content").scope("follower_list").build();
+	}
+
+	public Token saveAccessToken(String clientID, String verifierString) {
+
 		Verifier verifier = new Verifier(verifierString);
 		Token accessToken = null;
 
@@ -36,7 +40,7 @@ public class OAuth2Instagram implements OAuth2 {
 		}
 
 		try {
-			FileOutputStream fos = new FileOutputStream(clientID + ".token");
+			FileOutputStream fos = new FileOutputStream(verifierString + ".token");
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(accessToken);
 
@@ -55,16 +59,13 @@ public class OAuth2Instagram implements OAuth2 {
 		return accessToken;
 	}
 
-	/**
-	 * gets the stored Access Token of clientID
-	 */
-	public Token getStoredAccessToken(String clientID) {
+	public Token getStoredAccessToken(String verifierString) {
 		FileInputStream fis;
 		Token token = null;
-		File file = new File(clientID + ".token");
+		File file = new File(verifierString + ".token");
 		try {
 			if (file.exists()) {
-				fis = new FileInputStream(clientID + ".token");
+				fis = new FileInputStream(verifierString + ".token");
 				ObjectInputStream ois = new ObjectInputStream(fis);
 				token = (Token) ois.readObject();
 				ois.close();
@@ -78,6 +79,18 @@ public class OAuth2Instagram implements OAuth2 {
 			e.printStackTrace();
 		}
 		return token;
+	}
+
+	@Override
+	public String getAuthURL() {
+		String authorizationUrl = "create Service please";
+		if (service != null) {
+			authorizationUrl = service.getAuthorizationUrl(EMPTY_TOKEN);
+			//TODO swap URL show to UI
+
+		}
+
+		return authorizationUrl;
 	}
 
 }

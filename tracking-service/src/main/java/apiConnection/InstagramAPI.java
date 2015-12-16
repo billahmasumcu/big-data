@@ -3,7 +3,11 @@ package apiConnection;
 import java.util.List;
 
 import org.jinstagram.Instagram;
-
+/**
+ * API to get responses from Instagram
+ * @author Salah Beck
+ *
+ */
 public class InstagramAPI implements API<Instagram> {
 
 	@Override

@@ -2,15 +2,27 @@ package apiConnection;
 
 import java.util.List;
 
+/**
+ * Interface for API to use for several APIS
+ * @author Salah Beck
+ *
+ * @param <T>
+ */
 public interface API<T> {
 
 	/**
-	 * uses generic type to be more flexible
+	 * gets connection to serve the OAuth protocol
+	 * 
 	 * @param accessToken
 	 * @param clientSecret
 	 * @return
 	 */
-	public T getconnection(String accessToken, String clientSecret);
+	 T getconnection(String accessToken, String clientSecret);
 
-	public List<?> getRecentMediaByHashTag(String tag);
+	 /**
+	  * returns a List of Medias searched by hashtags
+	  * @param tag
+	  * @return
+	  */
+	 List<?> getRecentMediaByHashTag(String tag);
 }
